@@ -1,0 +1,15 @@
+Wed Jan 17 18:44:52 PST 2024
+Hello, lisayuan
+Your home directory is: /Users/lisayuan
+Your default shell is: /bin/zsh
+Your current working directory is: /Users/lisayuan/Code/mcb185_homework
+Your system's PATH is: /Users/lisayuan/anaconda3/bin:/Users/lisayuan/anaconda3/condabin:/Users/lisayuan/perl5/bin:/Library/Frameworks/Python.framework/Versions/3.10/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
+Darwin eneis-MacBook-Pro.local 21.6.0 Darwin Kernel Version 21.6.0: Mon Aug 22 20:19:52 PDT 2022; root:xnu-8020.140.49~2/RELEASE_ARM64_T6000 arm64
+Python 3.10.9
+/Users/lisayuan/Code
+/Users/lisayuan/Code/mcb185_homework
+/Users/lisayuan/Code/mcb185_homework/.git
+/Users/lisayuan/Code/MCB185
+/Users/lisayuan/Code/MCB185/.git
+/Users/lisayuan/Code/MCB185/data
+/Users/lisayuan/Code/Notes
