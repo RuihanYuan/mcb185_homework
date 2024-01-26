@@ -1,3 +1,5 @@
+# Author: Lisa
+
 # Import math for later calculation
 import math
 import sys
