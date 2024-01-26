@@ -1,11 +1,10 @@
-# import library to use
+# Import library to use
 
 import sys
 
-# function that return Kyte-Doolittle hydrophobicity value
+# Function that return Kyte-Doolittle hydrophobicity value
 
 def kyte_hydrophobic(aa):
-	aa = aa.upper()
 	if aa == "A":
 		return 1.80
 	elif aa == "C":
@@ -49,9 +48,9 @@ def kyte_hydrophobic(aa):
 	else:
 		sys.exit("Must be an amino acid letter")
 		
-# test
+# Test
 
 print(kyte_hydrophobic("A"))
 print(kyte_hydrophobic("Y"))
-print(kyte_hydrophobic("w"))
-print(kyte_hydrophobic("b"))
+print(kyte_hydrophobic("W"))
+print(kyte_hydrophobic("B"))
