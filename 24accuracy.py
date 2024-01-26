@@ -1,10 +1,8 @@
 # Import library
-
 import sys
 
 
 # Function for calculating accuracy and F1 score
-
 def accuracy_calc(tp,tn,fp,fn):
 	total = tp + tn + fp + fn
 	
@@ -32,7 +30,6 @@ def accuracy_calc(tp,tn,fp,fn):
 	
 
 # Test
-
 print("accuracy, F1 score:",accuracy_calc(20,40,50,30))
 print("accuracy, F1 score:",accuracy_calc(50,25,60,25))
 print("accuracy, F1 score:",accuracy_calc(15,30,20,60))

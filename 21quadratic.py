@@ -1,8 +1,8 @@
-# import math for later calculation
+# Import math for later calculation
 import math
 import sys
 
-# function for solving quadratic equation
+# Function for solving quadratic equation
 def quad_solver(a, b, c):
 	if a == 0:
 		sys.exit("Coefficient 'a' can't be 0")
@@ -20,7 +20,7 @@ def quad_solver(a, b, c):
 		return ans1, ans2
 	
 	
-# test
+# Test
 ans1,ans2 = quad_solver(13, 40, 5)
 print("answer:", ans1,",", ans2)
 
