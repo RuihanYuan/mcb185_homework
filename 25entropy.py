@@ -26,4 +26,4 @@ def shannon_entropy(a,c,t,g):
 # Test
 print("Entropy:",shannon_entropy(0, 2, 4, 4))
 print("Entropy:",shannon_entropy(1, 1, 1, 1))
-print("Entropy:",shannon_entropy(1, 0, 10, 0))		
+print("Entropy:",shannon_entropy(1, 0, 10, 0))
