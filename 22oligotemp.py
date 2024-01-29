@@ -1,6 +1,6 @@
 
 # Function to calculate oligo melting temperature
-def oligo_tm(a,c,t,g):
+def oligo_tm(a, c, t, g):
 	num_oligo = a + c + t + g
 	
 	if num_oligo <= 13:

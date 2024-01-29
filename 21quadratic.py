@@ -23,14 +23,14 @@ def quad_solver(a, b, c):
 	
 	
 # Test
-ans1,ans2 = quad_solver(13, 40, 5)
+ans1, ans2 = quad_solver(13, 40, 5)
 print("answer:", ans1,",", ans2)
 
-ans1,ans2 = quad_solver(23, 34, 2)
+ans1, ans2 = quad_solver(23, 34, 2)
 print("answer:", ans1, ",", ans2)
 
-ans1,ans2 = quad_solver(1, 10, 4)
+ans1, ans2 = quad_solver(1, 10, 4)
 print("answer:", ans1, ",", ans2)
 
-ans1,ans2 = quad_solver(0, 2, 5)
+ans1, ans2 = quad_solver(0, 2, 5)
 print("answer:", ans1, ",", ans2)

@@ -2,7 +2,7 @@
 import math
 
 # Function to compute shannon entropy of nucleotides
-def shannon_entropy(a,c,t,g):
+def shannon_entropy(a, c, t, g):
 	total = a + c + t + g
 	assert(total != 0)
 	
