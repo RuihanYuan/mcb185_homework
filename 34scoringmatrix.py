@@ -6,18 +6,17 @@ sequence = 'ACGT'
 head_row = "   "
 
 for nt in sequence:
-				# increment by the nucleotide and the add spaces to math the width
-				head_row += nt + "  "
+	# increment by the nucleotide and the add spaces to math the width
+	head_row += nt + "  "
 print(head_row)
 
 # print the matrix
 for row_nt in sequence:
-				row = row_nt
-				
-				# +1 for nt match -1 for mismatch
-				for col_nt in sequence:
-								if row_nt == col_nt:
-												row += ' +1'
-								else:
-												row += ' -1'
-				print(row)
+	row = row_nt
+	# +1 for nt match -1 for mismatch
+	for col_nt in sequence:
+		if row_nt == col_nt:
+			row += ' +1'
+		else:
+			row += ' -1'
+	print(row)

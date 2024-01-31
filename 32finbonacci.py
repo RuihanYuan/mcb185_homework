@@ -8,7 +8,7 @@ print(i)
 
 # the next number is the sum of the previous two numbers
 for num in range(8):
-				k = i + j
-				print(j)
-				i = j
-				j = k
+	k = i + j
+	print(j)
+	i = j
+	j = k
