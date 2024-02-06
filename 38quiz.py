@@ -1,14 +1,15 @@
 #author: Lisa Yuan, Francessca Asuncion
 
-
+#gregory
 def pi_cal(n):
+	pi = 0
 	for i in range(n):
-		pi = 4 * (-1)**(i) / (2 * i + 1)
+		pi += 4 * (-1)**(i) / (2 * i + 1)
 	return pi
 	
 
-
-def pi_calc(n):
+#nilakantha
+def nilakantha(n):
 	pi = 3
 	# sign = sign*-1 to alternative
 	sign = 1
@@ -18,4 +19,4 @@ def pi_calc(n):
 	return pi
 	
 for i in range(1,100):
-	print(pi_cal(i),pi_calc(i))
+	print(pi_cal(i),nilakantha(i))
