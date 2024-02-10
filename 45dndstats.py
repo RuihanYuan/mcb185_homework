@@ -1,3 +1,4 @@
+#co-author: Pearce Pelia
 import random
 
 iteration = 10000
