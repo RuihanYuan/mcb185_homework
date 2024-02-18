@@ -8,18 +8,22 @@ days = int(sys.argv[2])
 people = int(sys.argv[3])
 
 def bday_calendar(trials, days, people):
-	shared_bday_trials = 0																	#how many trials have shared bday
+#how many trials have shared bday
+	shared_bday_trials = 0
 	for i in range(trials):
-		calendar = []																									#initially, 0 people  having bday on each day
+	#initially, 0 people  having bday on each day
+		calendar = []
 		for j in range(days):
 			calendar.append(0)
 		
 		for k in range(people):
 			bday = random.randint(0, days - 1)
-			calendar[bday] += 1																	#after assign a date, increment the count on calendar
+			#after assign a date, increment the count on calendar
+			calendar[bday] += 1
 			
 		shared_bday = False
-		for day_count in calendar:											#check if any of the date has more than 1 person
+		#check if any of the date has more than 1 person
+		for day_count in calendar:
 			if day_count > 1:
 				shared_bday = True
 				break
