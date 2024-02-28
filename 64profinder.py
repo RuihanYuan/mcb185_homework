@@ -18,12 +18,14 @@ def process_sequence(seq, min_len):
 	# Process forward frames
 	for i in range(3):
 		trans_seq = dogma.translate(seq[i:])
-		valid_proteins.extend(find_proteins_in_frame(trans_seq, min_len))
+		for protein in find_proteins_in_frame(trans_seq, min_len):
+			valid_proteins.append(protein)
 	# Process reverse frames
 	rev_seq = dogma.revcomp(seq)
 	for i in range(3):
 		trans_seq = dogma.translate(rev_seq[i:])
-		valid_proteins.extend(find_proteins_in_frame(trans_seq, min_len))
+		for protein in find_proteins_in_frame(trans_seq, min_len):
+			valid_proteins.append(protein)
 	return valid_proteins
 
 fasta_file = sys.argv[1]
