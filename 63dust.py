@@ -15,9 +15,9 @@ def mask_seq(seq, w, threshold):
 	#convert to list
 	seq_list = [nt for nt in seq]
 	for i in range(len(seq) - w + 1):
-		window = ''.join(seq_list[i:i+w])
+		window = seq[i:i+w]
 		cur_en = entropy_cal(window)
-		print(f"Window: {window}, entropy: {cur_en}")
+		#print(f"Window: {window}, entropy: {cur_en}")
 		if cur_en < threshold:
 			for j in range(i, i + w):
 				seq_list[j] = 'N'
@@ -28,4 +28,5 @@ for defline, seq in mcb185.read_fasta(sys.argv[1]):
 	threshold = float(sys.argv[3])
 	masked_seq = mask_seq(seq, w, threshold)
 	print(f">{defline}")
-	print(masked_seq)
+	for i in range(0, len(masked_seq), 60):
+		print(masked_seq[i:i+60])
