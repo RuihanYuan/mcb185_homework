@@ -17,9 +17,10 @@ Participation
 | U | AC | VP | AQ | OC | SH | SA | CA | OA | Tot | Notes
 |:-:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|:---:|:--------
 | 5 |  2 |    |  1 |    |  2 | 1  | 3  |    | 9   |       
-| 6 |
+| 6 |  2 |    |    |    |  2 | 1  | 2  | 1  | 8   | 1.
 | 7 | 
 | 8 | 
 | 9 |
 
 Notes:
+1. helped classmate on debugging 64 and 65
