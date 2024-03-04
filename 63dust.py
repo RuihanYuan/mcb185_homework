@@ -13,7 +13,10 @@ def entropy_cal(seq):
 
 def mask_seq(seq, w, threshold):
 	#convert to list
-	seq_list = [nt for nt in seq]
+	seq_list = []
+	for nt in seq:
+		seq_list.append(nt)
+		
 	for i in range(len(seq) - w + 1):
 		window = seq[i:i+w]
 		cur_en = entropy_cal(window)
