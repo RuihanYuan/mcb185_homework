@@ -12,10 +12,7 @@ def entropy_cal(seq):
 	return entropy
 
 def mask_seq(seq, w, threshold):
-	#convert to list
-	seq_list = []
-	for nt in seq:
-		seq_list.append(nt)
+	seq_list = list(seq)
 		
 	for i in range(len(seq) - w + 1):
 		window = seq[i:i+w]
