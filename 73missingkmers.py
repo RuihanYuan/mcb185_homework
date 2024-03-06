@@ -34,9 +34,8 @@ for defline, seq in mcb185.read_fasta(sys.argv[1]):
 		#generate all possible kmers given k
 		all_kmer = []
 		for nts in itertools.product('ACGT', repeat=k):
-			kmer = ""
-			for nt in nts:
-				kmer += nt
+			kmer_list = list(nts)
+			kmer = ''.join(kmer_list)
 			all_kmer.append(kmer)
 			
 		#identify kmers that are possible but were not found
