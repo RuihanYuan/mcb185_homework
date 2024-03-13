@@ -6,8 +6,10 @@ import dogma
 
 parser = argparse.ArgumentParser(description='mRNA translator.')
 parser.add_argument('file', type=str, help='fasta file of mRNAs')
-parser.add_argument('-m', '--min', type=int, default=100, help='minimum protein length[%(default)i]')
-parser.add_argument('-a', '--anti', action='store_true', help='also examine the anti-parallel strand')
+parser.add_argument('-m', '--min', type=int, default=100,
+																				help='minimum protein length[%(default)i]')
+parser.add_argument('-a', '--anti', action='store_true',
+																				help='also examine the anti-parallel strand')
 arg = parser.parse_args()
 #print('dusting with', arg.file, arg.min, arg.anti)
 
