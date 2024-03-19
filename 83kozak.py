@@ -1,82 +1,79 @@
-import gzip
+
 import sys
 import re
+import gzip
 
-import mcb185
+def revcomp(dna):
+				rc = []
+				for nt in dna[::-1]:  
+								if nt == 'a': rc.append('t')
+								elif nt == 'c': rc.append('g')
+								elif nt == 'g': rc.append('c')
+								elif nt == 't': rc.append('a')
+								else: rc.append('N')
+				return ''.join(rc)
 
-def parse_gb(gb_file):
-	start_pos = []
-	with gzip.open(gb_file, 'rt') as fp:
+def calculate_pwm(file_path):
+	sequences = []
+	position = []
+
+	for i in range(14):
+		nt_count = {'A': 0, 'C': 0, 'G': 0, 'T': 0}
+		position.append(nt_count)
+
+	# Extract the sequence
+	with gzip.open(file_path, 'rt') as fp:
+		origin_found = False
 		for line in fp:
-			line = line.strip()
-			if line.startswith('CDS'):
-				match = re.search(r'(\d+)', line)	#find first number in line
-				if match:
-					start = int(match.group(1)) - 1
-					start_pos.append(start)
-	return start_pos
-	
-def initiation_seq(seq, start_pos, length):
-	consensus = []
-	for start in start_pos:
-		if start >= length:
-			ini_seq = seq[start-length:start]
-			consensus.append(ini_seq)
-	return consensus
-	
-def pwm_cal(up_seq):
-	pwm = []
-	for i in range(len(up_seq[0])):
-		pwm.append({'A': 0, 'C': 0, 'G': 0, 'T': 0})
-	for seq in up_seq:
-		for i, nt in enumerate(seq):
-			if nt in pwm[i]:
-				pwm[i][nt] += 1
-	return pwm
+						if re.search('ORIGIN', line): 
+										origin_found = True
+										continue
+						if origin_found:
+										if line.startswith('//'):
+														break
+										else:
+														sequence = ''.join(line.rstrip().split()[1:])
+														sequences.append(sequence)
+	joined_seq = ''.join(sequences)
 
-def transfac_format(pwm_data):
-	transfac_format = (
-	f"AC {pwm_data['AC']}\n"
-	"XX\n"
-	f"ID {pwm_data['ID']}\n"
-	"XX\n"
-	f"DE {pwm_data['DE']}\n"
-	f'{"PO":<8}{"A":<8}{"C":<8}{"G":<8}{"T":<8}\n'
-	)
-	for i, counts in enumerate(pwm_data['pwm'], start=1):
-		transfac_format += (
-		f'{i:<8}'
-		f'{counts["A"]:<8}'
-		f'{counts["C"]:<8}'
-		f'{counts["G"]:<8}'
-		f'{counts["T"]:<8}\n'
-		)
-	
-	transfac_format += "XX\n"
-	return transfac_format
+	# Find PWM
+	with gzip.open(file_path, 'rt') as fp:
+		for line in fp:
+				if line.startswith('     CDS'):
+						index = line.rstrip().split()[1]
+						if re.search('complement\(join|join', line):
+										continue
+						elif re.search('complement', line): 
+										end_i = index.split('..')[-1].split(')')[0]
+										seq = revcomp(joined_seq[int(end_i)-5:int(end_i)+9])
+						else:
+										start_i = index.split('..')[0]
+										seq = joined_seq[int(start_i)-10:int(start_i)+4]
 
-gb_file = sys.argv[1]
-length = int(sys.argv[2])
-fa_file = sys.argv[3]
+						for i, nt in enumerate(seq[:14]):
+										if nt == 'a': position[i]['A'] += 1
+										elif nt == 'c': position[i]['C'] += 1
+										elif nt == 'g': position[i]['G'] += 1
+										elif nt == 't': position[i]['T'] += 1
 
-for defline, seq in mcb185.read_fasta(fa_file):
-	start_pos = parse_gb(gb_file)
-	up_seq = initiation_seq(seq, start_pos, length)
-	print('seq found:')
-	for us in up_seq:
-		print(us)
+	return position
 
-pwm = pwm_cal(up_seq)
-for pos, counts in enumerate(pwm, start=1):
-	print(f'position {pos}: {counts}')
+#print PWM table
+def print_pwm(position):
+	print('AC IMTSU001')
+	print('XX')
+	print('ID ECKOZ')
+	print('DE I made this up')
+	print('PO      A       C       G       T')
+	for i in range(14):
+					line = (f'{i+1:<8}'
+													f'{position[i]["A"]:<8}'
+													f'{position[i]["C"]:<8}'
+													f'{position[i]["G"]:<8}'
+													f'{position[i]["T"]:<8}')
+					print(line)
+	print('XX')
 
-pwm_data = {
-	"AC": "IMTSU001",
-	"ID": "ECKOZ",
-	"DE": "I made this up",
-	"pwm": pwm,
-}
-
-transfac_op = transfac_format(pwm_data)
-print(transfac_op)
-
+file_path = sys.argv[1]
+position = calculate_pwm(file_path)
+print_pwm(position)

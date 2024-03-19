@@ -1,116 +1,74 @@
-
-import sys
-import gzip
-
 import mcb185
+import gzip
+import sys
 
-#parse gff file
-def parse_gff(gff_file):
+fasta_path = sys.argv[1]
+gff_path = sys.argv[2]
+
+def read_fasta(fasta_file):
+	sequences = {}
+	for defline, seq in mcb185.read_fasta(fasta_file):
+		chrom_id = defline.split()[0]
+		sequences[chrom_id] = seq
+	return sequences
+
+def load_introns(gff_file):
 	introns = []
 	with gzip.open(gff_file, 'rt') as fp:
 		for line in fp:
-			if line.strip() and not line.startswith('#'):
-				cols = line.strip().split('\t')
-				if cols[1] != 'RNASeq_splice':	continue
-				chrom = cols[0]
-				start = int(cols[3])
-				end = int(cols[4])
-				strand = cols[6]
-				introns.append((chrom, start, end, strand))
-				#print(f"Intron found: {chrom}, {start}, {end}, {strand}")
+			parts = line.strip().split('\t')
+			if parts[2] == 'intron' and parts[5] != '.':
+				chrom = parts[0]
+				start = int(parts[3]) - 1
+				end = int(parts[4]) - 1
+				score = float(parts[5])
+				strand = parts[6]
+				introns.append((chrom, start, end, score, strand))
 	return introns
-	
-#parse fa file
-def parse_fa(fa_file):
-	seqs = {}
-	for defline, seq in mcb185.read_fasta(fa_file):
-		line = defline.strip().split()
-		if line:
-			chrom = line[0]
-			seqs[chrom] = seq
-			print(f"Sequence read for chromosome: {chrom}")
-	return seqs
 
-
-#TRANSFAC format 
-def transfac_format(pwm_data):
-	transfac_format = (
-	f"AC {pwm_data['AC']}\n"
-	"XX\n"
-	f"ID {pwm_data['ID']}\n"
-	"XX\n"
-	f"DE {pwm_data['DE']}\n"
-	f'{"PO":<8}{"A":<8}{"C":<8}{"G":<8}{"T":<8}\n'
-	)
-	for i, counts in enumerate(pwm_data['pwm'], start=1):
-		transfac_format += (
-		f'{i:<8}'
-		f'{counts["A"]:<8}'
-		f'{counts["C"]:<8}'
-		f'{counts["G"]:<8}'
-		f'{counts["T"]:<8}\n'
-		)
-	
-	transfac_format += "XX\n//\n"
-	return transfac_format
-
-#calculate PWM
-def pwm_cal(up_seq):
+def initialize_pwm(length):
 	pwm = []
-	for seq in up_seq:
-		while len(pwm) < len(seq):
-			pwm.append({'A': 0, 'C': 0, 'G': 0, 'T': 0})
-		for i, nt in enumerate(seq):
-			if nt in pwm[i]:
-				pwm[i][nt] += 1
+	for _ in range(length):
+		pwm_dict = {'A': 0, 'C': 0, 'G': 0, 'T': 0}
+		pwm.append(pwm_dict)
 	return pwm
 
-gff_file = sys.argv[1]
-fa_file = sys.argv[2]
+def update_pwm(pwm, sequence):
+	for i in range(len(sequence)):
+		nt = sequence[i]
+		if nt in pwm[i]:
+						pwm[i][nt] += 1
 
-introns = parse_gff(gff_file)
-sequences = parse_fa(fa_file)
-#print("Chromosomes available in sequences dictionary:", sequences.keys())
+def print_pwm(pwm, ac, id, desc):
+	print('AC', ac)
+	print('XX')
+	print('ID', id)
+	print('DE', desc)
+	print(f'{"PO":<8}{"A":<8}{"C":<8}{"G":<8}{"T":<8}')
+	for i, counts in enumerate(pwm):
+		print(f'{i+1:<8}', end='')
+		for nt in ['A', 'C', 'G', 'T']:
+						print(f'{counts[nt]:<8}', end='')
+		print()
+	print('XX')
+	print('//')
 
-#to hold sequences
-d_sites = []
-a_sites = []
+chrom_sequences = read_fasta(fasta_path)
+introns_info = load_introns(gff_path)
 
-#length of region
-d_length = 6
-a_length = 7
+don_pwm = initialize_pwm(6)
+acc_pwm = initialize_pwm(7)
 
-for chrom, start, end, strand in introns:
-	#print(f"Accessing sequence for chromosome: '{chrom}'")
-	if strand == '+':
-		d_seq = sequences[chrom][start-d_length:start]
-		a_seq = sequences[chrom][end:end+a_length]
-	#intron_seq = sequences[chrom][start-1:end]
+for chrom, start, end, score, strand in introns_info:
+	if strand == "+":
+		intron_seq = chrom_sequences[chrom][start:end+1]
 	else:
-		d_seq = mcb185.anti_seq(sequences[chrom][end:end+d_length])
-		a_seq = mcb185.anti_seq(sequences[chrom][start-a_length:start])
-		
-	d_sites.append(d_seq)
-	a_sites.append(a_seq)
-	
-d_pwm = pwm_cal(d_sites)
-a_pwm = pwm_cal(a_sites)
+		intron_seq = mcb185.anti_seq(chrom_sequences[chrom][start:end+1])
+	d_seq = intron_seq[:6]
+	a_seq = intron_seq[-7:]
+	update_pwm(don_pwm, d_seq)
+	update_pwm(acc_pwm, a_seq)
 
-pwm_donor = {
-	'AC': 'DONOR1',
-	'ID': 'DON',
-	'DE': 'splice donor',
-	'pwm': d_pwm,
-}
-
-pwm_acceptor = {
-	'AC': 'ACCEPTOR1',
-	'ID': 'ACC',
-	'DE': 'splice acceptor',
-	'pwm': a_pwm,
-}
-
-print(transfac_format(pwm_acceptor))
-print(transfac_format(pwm_donor))
-
+print_pwm(acc_pwm, 'DEM01', 'ACC', 'splice acceptor')
+print_pwm(don_pwm, 'DEM02', 'DON', 'splice donor')
 
