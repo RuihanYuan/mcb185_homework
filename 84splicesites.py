@@ -48,7 +48,7 @@ def print_pwm(pwm, ac, id, desc):
 	for i, counts in enumerate(pwm):
 		print(f'{i+1:<8}', end='')
 		for nt in ['A', 'C', 'G', 'T']:
-						print(f'{counts[nt]:<8}', end='')
+			print(f'{counts[nt]:<8}', end='')
 		print()
 	print('XX')
 	print('//')
