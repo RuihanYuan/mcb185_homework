@@ -23,7 +23,7 @@ def entropy_cal(seq):
 		nt_count = 0
 		for char in seq:
 			if char == nt:
-							nt_count += 1
+				nt_count += 1
 		p = nt_count / seq_length
 		if p > 0:
 			entropy += -p * math.log2(p)
