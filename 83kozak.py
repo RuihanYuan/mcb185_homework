@@ -66,12 +66,12 @@ def print_pwm(position):
 	print('DE I made this up')
 	print('PO      A       C       G       T')
 	for i in range(14):
-					line = (f'{i+1:<8}'
-													f'{position[i]["A"]:<8}'
-													f'{position[i]["C"]:<8}'
-													f'{position[i]["G"]:<8}'
-													f'{position[i]["T"]:<8}')
-					print(line)
+		line = (f'{i+1:<8}'
+										f'{position[i]["A"]:<8}'
+										f'{position[i]["C"]:<8}'
+										f'{position[i]["G"]:<8}'
+										f'{position[i]["T"]:<8}')
+		print(line)
 	print('XX')
 
 file_path = sys.argv[1]
